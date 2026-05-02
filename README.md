@@ -48,13 +48,13 @@ VPC iot-mqtt-VPC (192.168.0.0/16)
      ├── Subred pública — 192.168.1.0/24
      │        EC2 Ubuntu t3.micro
      │        IP elástica: 32.196.10.168
-     │        ├── Broker Mosquitto (puerto 1883)
-     │        ├── Telegraf (agente puente MQTT → InfluxDB)
-     │        ├── InfluxDB (puerto 8086)
+     │        ├── Broker Mosquitto (puerto 1883)  
      │        └── Grafana (puerto 3000)
      │
      └── Subred privada — 192.168.2.0/24
               EC2 Ubuntu (instancia adicional)
+              ├── Telegraf (agente puente MQTT → InfluxDB)
+              ├── InfluxDB (puerto 8086)
               Sin acceso directo a internet
               Acceso mediante NAT Gateway
 ```
