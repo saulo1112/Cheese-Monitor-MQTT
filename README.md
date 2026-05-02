@@ -189,13 +189,13 @@ Se probó el funcionamiento con dos terminales en la EC2:
 
 ```bash
 # Terminal 1 — suscriptor
-mosquitto_sub -h localhost -t "esp32/sensor" -u saulo -P password
+mosquitto_sub -h localhost -t "esp32/sensor" -u user -P password
 
 # Terminal 2 — publicador
-mosquitto_pub -h localhost -t "esp32/sensor" -m '{"temperature":29,"humidity":74}' -u saulo -P password
+mosquitto_pub -h localhost -t "esp32/sensor" -m '{"temperature":29,"humidity":74}' -u user -P password
 ```
 
-También se verificó con **MQTT Explorer** conectado a `ec2-32-196-10-168.compute-1.amazonaws.com` en el puerto 1883, confirmando recepción de mensajes del ESP32 en tiempo real.
+También se verificó con MQTT Explorer conectado a `ec2-32-196-10-168.compute-1.amazonaws.com` en el puerto 1883, confirmando recepción de mensajes del ESP32 en tiempo real.
 
 ---
 
@@ -303,13 +303,6 @@ El dashboard incluye los siguientes paneles:
 | Humedad en el tiempo | Time series | `SELECT mean("humidity") FROM "mqtt_consumer" WHERE $timeFilter GROUP BY time($__interval)` |
 | Registros recientes | Table | `SELECT "temperature", "humidity" FROM "mqtt_consumer" WHERE $timeFilter ORDER BY time DESC LIMIT 50` |
 
-Los umbrales de color están configurados así:
-
-| Métrica | Verde | Naranja | Rojo |
-|---|---|---|---|
-| Temperatura | < 30°C | 30 – 33°C | > 33°C |
-| Humedad | > 70% | 60 – 70% | < 60% |
-
 ### 8.4 Alertas
 
 Se configuraron dos reglas de alerta en **Alerting → Alert rules**:
@@ -381,21 +374,21 @@ mosquitto_sub -h localhost -t "esp32/sensor" -u saulo -P password
 
 | Servicio | URL | Credenciales |
 |---|---|---|
-| Grafana | `http://32.196.10.168:3000` | admin / admin |
+| Grafana | `http://32.196.10.168:3000` | admin / password |
 | InfluxDB API | `http://32.196.10.168:8086` | sin auth |
-| Broker MQTT | `32.196.10.168:1883` | saulo / iotact22 |
+| Broker MQTT | `32.196.10.168:1883` | user / password |
 
 ---
 
 ## 11. Lecciones aprendidas
 
-- El flag `-c` en `mosquitto_passwd` crea el archivo desde cero — si se ejecuta dos veces borra el usuario anterior. Para agregar usuarios adicionales se omite `-c`.
-- El error `status=13` en Mosquitto indica problema de permisos — se resuelve con `chown mosquitto:mosquitto` sobre el archivo passwd.
+- El flag `-c` en `mosquitto_passwd` crea el archivo desde cero, si se ejecuta dos veces borra el usuario anterior. Para agregar usuarios adicionales se omite `-c`.
+- El error `status=13` en Mosquitto indica problema de permisos, se resuelve con `chown mosquitto:mosquitto` sobre el archivo passwd.
 - Telegraf necesita un bloque `[agent]` mínimo en su configuración para arrancar correctamente.
 - El `root_url` de Grafana debe configurarse sin el punto y coma (`;`) inicial, de lo contrario la línea queda comentada y los links de alertas apuntan a localhost.
-- En AWS Academy las IP públicas de EC2 pueden cambiar entre sesiones de laboratorio — la IP elástica resuelve este problema para los links del ESP32 y Grafana.
+- En AWS Academy las IP públicas de EC2 pueden cambiar entre sesiones de laboratorio, la IP elástica resuelve este problema para los links del ESP32 y Grafana.
 - El NAT Gateway es necesario para que las instancias en subredes privadas puedan acceder a internet para instalar paquetes.
-- Gmail requiere una App Password (contraseña de aplicación) de 16 caracteres para enviar emails desde aplicaciones externas — la contraseña normal es rechazada.
+- Gmail requiere una App Password (contraseña de aplicación) de 16 caracteres para enviar emails desde aplicaciones externas, la contraseña normal es rechazada.
 - El `Ctrl+W` en el navegador cierra la pestaña — dentro de nano el atajo de búsqueda es `Ctrl+\` y el deshacer es `Alt+U`.
 
 ---
