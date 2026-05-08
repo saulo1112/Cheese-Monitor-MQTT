@@ -256,8 +256,8 @@ sudo systemctl enable telegraf
 [[inputs.mqtt_consumer]]
   servers = ["tcp://192.168.1.102:1883"]
   topics = ["esp32/sensor"]
-  username = "saulo"
-  password = "iotact22"
+  username = user
+  password = password 
   data_format = "json"
   data_type = "float"
 
@@ -365,7 +365,7 @@ influx -database 'iot-sensors' \
   -format csv > ~/datos_$(date +%Y-%m-%d).csv
 
 # Probar broker desde la EC2
-mosquitto_sub -h localhost -t "esp32/sensor" -u saulo -P password
+mosquitto_sub -h localhost -t "esp32/sensor" -u user -P password
 ```
 
 ---
