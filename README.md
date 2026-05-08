@@ -163,10 +163,10 @@ sudo systemctl enable mosquitto
 
 ### 5.2 Configuración de autenticación
 
-Se creó un archivo de contraseñas con el usuario `saulo`:
+Se creó un archivo de contraseñas con el usuario seleccionado:
 
 ```bash
-sudo mosquitto_passwd -c /etc/mosquitto/passwd saulo
+sudo mosquitto_passwd -c /etc/mosquitto/passwd user
 sudo chown mosquitto:mosquitto /etc/mosquitto/passwd
 sudo chmod 600 /etc/mosquitto/passwd
 ```
